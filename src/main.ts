@@ -37,6 +37,7 @@ const playerMarker = leaflet.marker(MERRILL_CLASSROOM);
 playerMarker.bindTooltip("That's you!");
 playerMarker.addTo(map);
 
+//Sensor
 const sensorButton = document.querySelector("#sensor")!;
 sensorButton.addEventListener("click", () => {
   navigator.geolocation.watchPosition((position) => {
