@@ -36,7 +36,7 @@ class coin {
     this.serial = serial;
   }
 }
-//Figure out soon
+//Figure out soon/dsadasdsa
 function coinIDGenerator(i: number, j: number) {}
 
 leaflet
