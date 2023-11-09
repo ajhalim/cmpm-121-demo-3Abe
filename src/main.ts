@@ -25,7 +25,7 @@ const map = leaflet.map(mapContainer, {
   scrollWheelZoom: false,
 });
 
-class coin {
+/* class coin {
   i: number;
   j: number;
   serial: number;
@@ -36,9 +36,9 @@ class coin {
     this.serial = serial;
   }
 }
-//Figure out soon/dsadasdsa
+//Figure out soon/dsadasdsa     
 function coinIDGenerator(i: number, j: number) {}
-
+ */
 leaflet
   .tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
