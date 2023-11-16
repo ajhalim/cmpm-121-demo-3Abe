@@ -25,6 +25,8 @@ a:hover {
 }
 
 body {
+  display: flex;
+  justify-content: center;
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
@@ -40,12 +42,28 @@ h1 {
 }
 
 #statusPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
   padding: 1rem;
 }
 
+#messages {
+  color: red;
+  justify-self: center;
+  max-width: 80%;
+  font-size: 1rem;
+  background-color: #242424;
+  margin-left: 25px;
+}
+
 #map {
-  width: 100%;
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90vw;
+  height: 80vh;
 }
 
 button {
