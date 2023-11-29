@@ -11,57 +11,56 @@ export class Board {
 
   private readonly knownCells: Map<string, Cell>;
 
-  constructor(tileWidth: number, tileVisibilityRadius: number) {
-    this.tileWidth = tileWidth;
-    this.tileVisibilityRadius = tileVisibilityRadius;
+  constructor(tileWidth: number, tileVisibility: number) {
+    this.tileWidth = tileWidth; //1e-4
+    this.tileVisibilityRadius = tileVisibility / this.tileWidth;
     this.knownCells = new Map();
   }
 
-  private getCanonicalCell(cell: Cell): Cell {
-    const { i, j } = cell;
-    const key = [i, j].toString();
+  getCellCoords(cell: Cell): leaflet.LatLng {
+    return leaflet.latLng(cell.i * this.tileWidth, cell.j * this.tileWidth);
+  }
+
+  getCanonicalCell(cell: Cell): Cell {
+    const key = [cell.i, cell.j].toString();
     if (!this.knownCells.has(key)) {
-      this.knownCells.set(key, { i: i, j: j });
+      this.knownCells.set(key, cell);
     }
     return this.knownCells.get(key)!;
   }
 
   getCellforPoint(point: leaflet.LatLng): Cell {
-    return this.getCanonicalCell({ i: point.lat, j: point.lng });
+    const i = Math.floor(point.lat / this.tileWidth);
+    const j = Math.floor(point.lng / this.tileWidth);
+    const cell = { i: i, j: j };
+    return this.getCanonicalCell(cell);
   }
 
   getCellBounds(cell: Cell): leaflet.LatLngBounds {
     return leaflet.latLngBounds([
-      [cell.i, cell.j],
-      [cell.i + this.tileWidth, cell.j + this.tileWidth],
-    ]);
-  }
-
-  getVisibilityBounds(pos: leaflet.LatLng) {
-    return leaflet.latLngBounds([
-      [
-        pos.lat - this.tileVisibilityRadius,
-        pos.lng - this.tileVisibilityRadius,
-      ],
-      [
-        pos.lat + this.tileVisibilityRadius,
-        pos.lng + this.tileVisibilityRadius,
-      ],
+      [(cell.i - 0) * this.tileWidth, (cell.j + 0) * this.tileWidth],
+      [(cell.i + 1) * this.tileWidth, (cell.j + 1) * this.tileWidth],
     ]);
   }
 
   getCellsNearPoint(point: leaflet.LatLng): Cell[] {
     const originCell = this.getCellforPoint(point);
-    const resultCells: Cell[] = [
-      { i: originCell.i + 1, j: originCell.j }, //top
-      { i: originCell.i, j: originCell.j - 1 }, //left
-      { i: originCell.i - 1, j: originCell.j }, //bottom
-      { i: originCell.i, j: originCell.j + 1 }, //right
-      { i: originCell.i + 1, j: originCell.j - 1 }, //top-left diag
-      { i: originCell.i - 1, j: originCell.j - 1 }, //bottom-left diag
-      { i: originCell.i - 1, j: originCell.j + 1 }, //bottom-right diag
-      { i: originCell.i + 1, j: originCell.j + 1 }, //top-right diag
-    ];
+    const resultCells: Cell[] = [];
+    for (
+      let i = -this.tileVisibilityRadius;
+      i < this.tileVisibilityRadius;
+      i++
+    ) {
+      for (
+        let j = -this.tileVisibilityRadius;
+        j < this.tileVisibilityRadius;
+        j++
+      ) {
+        resultCells.push(
+          this.getCanonicalCell({ i: originCell.i + i, j: originCell.j + j })
+        );
+      }
+    }
 
     return resultCells;
   }
