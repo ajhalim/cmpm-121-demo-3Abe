@@ -33,7 +33,7 @@ export class Geocache implements Momento<string> {
     }
     this.currentCoins = [];
     const numCoins = Math.floor(
-      luck([cell.i, cell.j, "initialnumCoins"].toString()) * 10
+      luck([cell.i, cell.j, "initialnumCoins"].toString()) * 100
     );
     for (let k = 0; k < numCoins; k++) {
       this.addCoin(new Coin(cell, k));
@@ -56,6 +56,7 @@ export class Geocache implements Momento<string> {
       currentCoins.push(new Coin(geocache.cell, index))
     );
     geocache.currentCoins = currentCoins;
+
     return geocache;
   }
 
